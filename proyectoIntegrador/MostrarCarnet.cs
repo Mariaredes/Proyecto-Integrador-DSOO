@@ -22,21 +22,6 @@ namespace proyectoIntegrador
             InitializeComponent();
         }
 
-        private void MostrarCarnet_Load(object sender, EventArgs e)
-        {
-
-        }
-
-
-        private void txtNroCliente_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void lblTitulo_Click(object sender, EventArgs e)
-        {
-
-        }
 
         private void btnImprimir_Click(object sender, EventArgs e)
         {
@@ -107,11 +92,11 @@ namespace proyectoIntegrador
         {
             if (string.IsNullOrWhiteSpace(txtNroCliente.Text))
             {
-                MessageBox.Show("Por favor, ingresa el número de cliente.");
+                MessageBox.Show("Por favor, ingresa el número de dni.");
                 return;
             }
 
-            string query = "SELECT id_cliente, nombre, apellido, dni, fechaNacimiento FROM cliente WHERE dni = @dni";
+            string query = "SELECT id_cliente, nombre, apellido, dni, fechaNacimiento, asociado FROM cliente WHERE dni = @dni";
 
             using (MySqlConnection sqlCon = Conexion.getInstancia().CrearConexion())
             {
@@ -130,15 +115,27 @@ namespace proyectoIntegrador
 
                         if (reader.Read())
                         {
-                            lblId_Cliente.Text = reader["id_cliente"].ToString();
-                            lblNombre.Text = reader["nombre"].ToString();
-                            lblApellido.Text = reader["apellido"].ToString();
-                            lblDNI.Text = reader["dni"].ToString();
-                            lblFechaNac.Text = Convert.ToDateTime(reader["fechaNacimiento"]).ToShortDateString();
+                            
+                            int asociado = Convert.ToInt32(reader["asociado"]);
+                            if (asociado == 0)
+                            {
+                                MessageBox.Show("El usuario que esta buscando no es socio", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                LimpiarCampos();
+                            }
+
+                            else
+                            {
+                                lblId_Cliente.Text = reader["id_cliente"].ToString();
+                                lblNombre.Text = reader["nombre"].ToString();
+                                lblApellido.Text = reader["apellido"].ToString();
+                                lblDNI.Text = reader["dni"].ToString();
+                                lblFechaNac.Text = Convert.ToDateTime(reader["fechaNacimiento"]).ToShortDateString();
+                            }
                         }
                         else
                         {
                             MessageBox.Show("Cliente no encontrado.");
+                            txtNroCliente.Focus();
                         }
                     }
                 }
@@ -157,6 +154,7 @@ namespace proyectoIntegrador
             lblApellido.Text = "";
             lblDNI.Text = "";
             lblFechaNac.Text = "";
+            txtNroCliente.Focus();
         }
     }
 }
