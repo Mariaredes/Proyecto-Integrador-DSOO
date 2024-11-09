@@ -45,9 +45,14 @@
             Application.Exit();
         }
 
-        private void Home_Load(object sender, EventArgs e)
-        {
 
+        // Evento para el botón "Carnet"
+        
+        private void btnCarnet_Click(object sender, EventArgs e)
+        {
+            MostrarCarnet nuevoFormulario = new MostrarCarnet();
+            nuevoFormulario.Show();
+            this.Close();
         }
     }
 }

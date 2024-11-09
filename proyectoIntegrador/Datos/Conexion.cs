@@ -18,7 +18,7 @@ namespace proyectoIntegrador.Datos
             this.servidor = "localhost";
             this.puerto = "3306";
             this.usuario = "root";
-            this.clave = "";
+            this.clave = "root";
         }
 
         public MySqlConnection CrearConexion() // corregido el nombre CrearConcexion a CrearConexion
